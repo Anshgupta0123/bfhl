@@ -2,7 +2,7 @@
   "name": "bfhl-challenge",
   "version": "1.0.0",
   "description": "Full stack application for BFHL Challenge",
-  "main": "index.js",
+  "main": "bfhl-frontend/src/app.js",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
