@@ -1,19 +1,47 @@
 {
   "name": "bfhl-challenge",
   "version": "1.0.0",
+  "description": "Full stack application for BFHL Challenge",
   "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "backend": "node backend/index.js", // Adjust the path to your backend entry file
+    "dev": "concurrently \"npm run backend\" \"npm run start\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "axios": "^1.7.9",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "helmet": "^8.0.0",
-    "joi": "^17.13.3"
+    "joi": "^17.13.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "concurrently": "^7.0.0" // Add concurrently to run both backend and frontend together
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
