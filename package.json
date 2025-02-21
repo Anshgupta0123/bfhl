@@ -9,7 +9,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "backend": "node backend/index.js", // Adjust the path to your backend entry file
+    "backend": "node backend/server.js",
     "dev": "concurrently \"npm run backend\" \"npm run start\""
   },
   "keywords": [],
@@ -24,7 +24,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
-    "concurrently": "^7.0.0" // Add concurrently to run both backend and frontend together
+    "concurrently": "^7.0.0" 
   },
   "eslintConfig": {
     "extends": [
