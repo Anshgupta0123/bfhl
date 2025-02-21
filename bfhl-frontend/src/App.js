@@ -3,77 +3,70 @@ import axios from 'axios';
 import './App.css';
 
 function App() {
-  const [input, setInput] = useState('');
-  const [response, setResponse] = useState(null);
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+    const [inputData, setInputData] = useState('');
+    const [responseData, setResponseData] = useState(null);
+    const [error, setError] = useState('');
+    const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const data = JSON.parse(input);
-      if (!Array.isArray(data.data)) {
-        throw new Error('Input must be an array of strings');
-      }
-      const res = await axios.post('https://your-heroku-app.herokuapp.com/bfhl', data);
-      setResponse(res.data);
-    } catch (err) {
-      setError(err.message || 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setResponseData(null);
 
-  const renderFilteredResponse = () => {
-    if (!response) return null;
+        try {
+            const jsonData = JSON.parse(inputData);
+            const response = await axios.post('https://bfhl-iksz.onrender.com', jsonData);
+            setResponseData(response.data);
+        } catch (err) {
+            setError('Invalid JSON input');
+        }
+    };
+
+    const handleSelectChange = (e) => {
+        const value = Array.from(e.target.selectedOptions, option => option.value);
+        setSelectedOptions(value);
+    };
+
+    const renderResponse = () => {
+        if (!responseData) return null;
+
+        const { numbers, alphabets, highest_alphabet } = responseData;
+        const selectedData = {
+            Numbers: selectedOptions.includes('Numbers') ? numbers : [],
+            Alphabets: selectedOptions.includes('Alphabets') ? alphabets : [],
+            'Highest Alphabet': selectedOptions.includes('Highest Alphabet') ? highest_alphabet : []
+        };
+
+        return (
+            <div>
+                <h3>Response:</h3>
+                <pre>{JSON.stringify(selectedData, null, 2)}</pre>
+            </div>
+        );
+    };
+
     return (
-      <div>
-        {selectedOptions.includes('Alphabets') && (
-          <p>Alphabets: {response.alphabets.join(', ') || 'None'}</p>
-        )}
-        {selectedOptions.includes('Numbers') && (
-          <p>Numbers: {response.numbers.join(', ') || 'None'}</p>
-        )}
-        {selectedOptions.includes('Highest alphabet') && (
-          <p>Highest Alphabet: {response.highest_alphabet.join(', ') || 'None'}</p>
-        )}
-      </div>
-    );
-  };
-
-  return (
-    <div className="App">
-      <h1>ABCD123</h1>
-      <form onSubmit={handleSubmit}>
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder='Enter JSON input (e.g., {"data": ["A", "1", "B", "2"]})'
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Processing...' : 'Submit'}
-        </button>
-      </form>
-      {error && <p className="error">{error}</p>}
-      {response && (
-        <div>
-          <select
-            multiple
-            value={selectedOptions}
-            onChange={(e) => setSelectedOptions(Array.from(e.target.selectedOptions, option => option.value))}
-          >
-            <option value="Alphabets">Alphabets</option>
-            <option value="Numbers">Numbers</option>
-            <option value="Highest alphabet">Highest alphabet</option>
-          </select>
-          {renderFilteredResponse()}
+        <div className="App">
+            <h1>BFHL Challenge</h1>
+            <form onSubmit={handleSubmit}>
+                <textarea
+                    value={inputData}
+                    onChange={(e) => setInputData(e.target.value)}
+                    placeholder='Enter JSON data here...'
+                    rows="4"
+                    cols="50"
+                />
+                <button type="submit">Submit</button>
+            </form>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <select multiple onChange={handleSelectChange}>
+                <option value="Numbers">Numbers</option>
+                <option value="Alphabets">Alphabets</option>
+                <option value="Highest Alphabet">Highest Alphabet</option>
+            </select>
+            {renderResponse()}
         </div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default App;
